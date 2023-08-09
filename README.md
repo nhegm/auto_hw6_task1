@@ -1,0 +1,1 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/gs5he75bik129nlv?svg=true)](https://ci.appveyor.com/project/nhegm/auto-hw6-task1)
