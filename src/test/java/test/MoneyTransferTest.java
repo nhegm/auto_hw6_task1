@@ -1,9 +1,9 @@
+package test;
+
 import data.DataHelper;
 import org.junit.jupiter.api.*;
 import page.LoginPage;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -21,12 +21,12 @@ public class MoneyTransferTest {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var balance1 = dashboardPage.getFirstCardBalance();
         var balance2 = dashboardPage.getLastCardBalance();
         var moneyTransferPage = dashboardPage.moneyTransferTo1();
-        moneyTransferPage.moneyTransferTo1Valid(balance2);
+        moneyTransferPage.moneyTransferTo(2, balance2);
 
         Assertions.assertEquals(balance1 + balance2, dashboardPage.getFirstCardBalance());
         Assertions.assertEquals(0, dashboardPage.getLastCardBalance());
@@ -39,11 +39,11 @@ public class MoneyTransferTest {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var balance1 = dashboardPage.getFirstCardBalance();
         var moneyTransferPage = dashboardPage.moneyTransferTo2();
-        moneyTransferPage.moneyTransferTo2Valid(balance1);
+        moneyTransferPage.moneyTransferTo(1, balance1);
 
         Assertions.assertEquals(0, dashboardPage.getFirstCardBalance());
         Assertions.assertEquals(balance1, dashboardPage.getLastCardBalance());
@@ -56,11 +56,11 @@ public class MoneyTransferTest {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var balance2 = dashboardPage.getLastCardBalance();
         var moneyTransferPage = dashboardPage.moneyTransferTo1();
-        moneyTransferPage.moneyTransferTo1Valid(balance2 - 1);
+        moneyTransferPage.moneyTransferTo(2, balance2 - 1);
 
         Assertions.assertEquals(balance2 - 1, dashboardPage.getFirstCardBalance());
         Assertions.assertEquals(1, dashboardPage.getLastCardBalance());
@@ -73,12 +73,12 @@ public class MoneyTransferTest {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var balance1 = dashboardPage.getFirstCardBalance();
         var balance2 = dashboardPage.getLastCardBalance();
         var moneyTransferPage = dashboardPage.moneyTransferTo2();
-        moneyTransferPage.moneyTransferTo2Valid(balance1 - 1);
+        moneyTransferPage.moneyTransferTo(1, balance1 - 1);
 
         Assertions.assertEquals(1, dashboardPage.getFirstCardBalance());
         Assertions.assertEquals(balance2 + balance1 - 1, dashboardPage.getLastCardBalance());
@@ -92,12 +92,12 @@ public class MoneyTransferTest {
         Integer money = 1;
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var balance1 = dashboardPage.getFirstCardBalance();
         var balance2 = dashboardPage.getLastCardBalance();
         var moneyTransferPage = dashboardPage.moneyTransferTo1();
-        moneyTransferPage.moneyTransferTo1Valid(money);
+        moneyTransferPage.moneyTransferTo(2, money);
 
         Assertions.assertEquals(balance1 + money, dashboardPage.getFirstCardBalance());
         Assertions.assertEquals(balance2 - money, dashboardPage.getLastCardBalance());
@@ -111,12 +111,12 @@ public class MoneyTransferTest {
         Integer money = 1;
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var balance1 = dashboardPage.getFirstCardBalance();
         var balance2 = dashboardPage.getLastCardBalance();
         var moneyTransferPage = dashboardPage.moneyTransferTo2();
-        moneyTransferPage.moneyTransferTo2Valid(money);
+        moneyTransferPage.moneyTransferTo(1, money);
 
         Assertions.assertEquals(balance1 - money, dashboardPage.getFirstCardBalance());
         Assertions.assertEquals(balance2 + money, dashboardPage.getLastCardBalance());
@@ -130,12 +130,12 @@ public class MoneyTransferTest {
         Integer money = 0;
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var moneyTransferPage = dashboardPage.moneyTransferTo2();
-        moneyTransferPage.moneyTransferTo2Valid(money);
+        moneyTransferPage.moneyTransferTo(1, money);
 
-        $("data-test-id=error-notification").shouldBe(visible);
+        moneyTransferPage.errorTransfer();
     }
 
     @Order(8)
@@ -146,12 +146,12 @@ public class MoneyTransferTest {
         Integer money = 0;
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var moneyTransferPage = dashboardPage.moneyTransferTo2();
-        moneyTransferPage.moneyTransferTo2Valid(money);
+        moneyTransferPage.moneyTransferTo(2, money);
 
-        $("data-test-id=error-notification").shouldBe(visible);
+        moneyTransferPage.errorTransfer();
     }
 
     @Order(9)
@@ -162,12 +162,12 @@ public class MoneyTransferTest {
         Integer money = 20_000;
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var moneyTransferPage = dashboardPage.moneyTransferTo2();
-        moneyTransferPage.moneyTransferTo2Valid(money);
+        moneyTransferPage.moneyTransferTo(1, money);
 
-        $("data-test-id=error-notification").shouldBe(visible);
+        moneyTransferPage.errorTransfer();
     }
 
     @Order(10)
@@ -178,12 +178,12 @@ public class MoneyTransferTest {
         Integer money = 22_000;
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
+        var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var moneyTransferPage = dashboardPage.moneyTransferTo1();
-        moneyTransferPage.moneyTransferTo1Valid(money);
+        moneyTransferPage.moneyTransferTo(1, money);
 
-        $("data-test-id=error-notification").shouldBe(visible);
+        moneyTransferPage.errorTransfer();
     }
 
     @Order(11)
@@ -193,24 +193,21 @@ public class MoneyTransferTest {
 
         var authInfo = DataHelper.getInvalidAuthInfoLogin();
         var loginPage = new LoginPage();
-        loginPage.InvalidLogin(authInfo);
+        loginPage.invalidLogin(authInfo);
 
-        $("[data-test-id=error-notification]").shouldBe(visible);
-        $("[data-test-id=error-notification] .notification__content").shouldHave(exactText("Ошибка! Неверно указан логин или пароль"));
+        loginPage.errorLogin();
     }
 
     @Order(12)
     @Test
     @DisplayName("Should not login when login is valid but password is not valid")
-    void shouldNotLoginWhenPasswordNotValid(){
+    void shouldNotLoginWhenPasswordNotValid() {
 
         var authInfo = DataHelper.getInvalidAuthInfoPassword();
         var loginPage = new LoginPage();
-        loginPage.InvalidLogin(authInfo);
+        loginPage.invalidLogin(authInfo);
 
-
-        $("[data-test-id=error-notification]").shouldBe(visible);
-        $("[data-test-id=error-notification] .notification__content").shouldHave(exactText("Ошибка! Неверно указан логин или пароль"));
+        loginPage.errorLogin();
     }
 
     @Order(13)
@@ -220,10 +217,9 @@ public class MoneyTransferTest {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
-        var verificationPage = loginPage.ValidLogin(authInfo);
-        verificationPage.invalidCode();
+        var verificationPage = loginPage.validLogin(authInfo);
+        verificationPage.invalidVerify();
 
-        $("[data-test-id=error-notification]").shouldBe(visible);
-        $("[data-test-id=error-notification] .notification__content").shouldHave(exactText("Ошибка! Неверно указан код! Попробуйте ещё раз."));
+        verificationPage.errorVerification();
     }
 }

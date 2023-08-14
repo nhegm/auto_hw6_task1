@@ -22,13 +22,21 @@ public class DataHelper {
         return new VerificationCode("12345");
     }
 
-    public static TransferInfo getValidTransferInfoToCard2(Integer amountToTransfer) {
-        return new TransferInfo(amountToTransfer.toString(), "5559 0000 0000 0001");
+    public static String getInvalidVerificationCode() {
+        return new String("12346");
     }
 
-    public static TransferInfo getValidTransferInfoToCard1(Integer amountToTransfer) {
-        return new TransferInfo(amountToTransfer.toString(), "5559 0000 0000 0002");
+    public static TransferInfo getValidTransferInfoTo(Integer fromCard, Integer amountToTransfer) {
+        String fromCardNumber = new String();
+        if (fromCard == 1) {
+            fromCardNumber="5559 0000 0000 0001";
+        }
+        if (fromCard == 2) {
+            fromCardNumber="5559 0000 0000 0002";
+        }
+        return new TransferInfo(fromCard, amountToTransfer.toString(), fromCardNumber);
     }
+
     @Value
     public static class AuthInfo {
        private String login;
@@ -42,8 +50,9 @@ public class DataHelper {
 
     @Value
     public static class TransferInfo {
+        private Integer fromCard;
         private String amount;
-        private String fromNumber;
+        private String fromCardNumber;
     }
 
 }
