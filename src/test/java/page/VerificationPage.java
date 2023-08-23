@@ -22,15 +22,14 @@ public class VerificationPage {
         buttonVerify.click();
         return new DashboardPage();
     }
-    public VerificationPage invalidVerify() {
+
+    public void invalidVerify() {
         codeField.setValue(DataHelper.getInvalidVerificationCode());
         buttonVerify.click();
-        return new VerificationPage();
     }
 
-    public VerificationPage errorVerification() {
+    public void errorVerification() {
         errorNote.shouldBe(visible);
         errorNote.shouldHave(exactText("Ошибка! Неверно указан код! Попробуйте ещё раз."));
-        return new VerificationPage();
     }
 }

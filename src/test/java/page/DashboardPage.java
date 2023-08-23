@@ -14,6 +14,7 @@ public class DashboardPage {
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
     private SelenideElement buttonRefresh = $("[data-test-id=action-reload]");
+
     public DashboardPage() {
         cards.first().shouldBe(visible);
     }

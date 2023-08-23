@@ -17,7 +17,7 @@ public class MoneyTransferTest {
     @Order(1)
     @Test
     @DisplayName("Should transfer SOME MONEY from 2-nd to 1-st card when login valid")
-    void shouldTransferMoneyWhenLoginValidFrom2To1Card(){
+    void shouldTransferMoneyWhenLoginValidFrom2To1Card() {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
@@ -26,7 +26,7 @@ public class MoneyTransferTest {
         var balance1 = dashboardPage.getFirstCardBalance();
         var balance2 = dashboardPage.getLastCardBalance();
         var moneyTransferPage = dashboardPage.moneyTransferTo1();
-        moneyTransferPage.moneyTransferValid(DataHelper.getSecondCardInfo());
+        moneyTransferPage.moneyTransfer(DataHelper.getSecondCardInfo(), DataHelper.getValidTransactionAmount(10_000).toString());
         var balance1New = dashboardPage.getFirstCardBalance();
         var balance2New = dashboardPage.getLastCardBalance();
 
@@ -36,7 +36,7 @@ public class MoneyTransferTest {
     @Order(2)
     @Test
     @DisplayName("Should transfer ALL MONEY from 1-st to 2-nd card when login valid")
-    void shouldTransferAllMoneyWhenLoginValidFrom1To2Card(){
+    void shouldTransferAllMoneyWhenLoginValidFrom1To2Card() {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
@@ -45,7 +45,7 @@ public class MoneyTransferTest {
         var balance1 = dashboardPage.getFirstCardBalance();
         var balance2 = dashboardPage.getLastCardBalance();
         var moneyTransferPage = dashboardPage.moneyTransferTo1();
-        moneyTransferPage.moneyTransferValid(DataHelper.getFirstCardInfo());
+        moneyTransferPage.moneyTransfer(DataHelper.getFirstCardInfo(), DataHelper.getValidTransactionAmount(10_000).toString());
         var balance1New = dashboardPage.getFirstCardBalance();
         var balance2New = dashboardPage.getLastCardBalance();
 
@@ -55,11 +55,11 @@ public class MoneyTransferTest {
     @Order(3)
     @Test
     @DisplayName("Should not login when login is not valid but password is valid")
-    void shouldNotLoginWhenLoginNotValid(){
+    void shouldNotLoginWhenLoginNotValid() {
 
         var authInfo = DataHelper.getInvalidAuthInfoLogin();
         var loginPage = new LoginPage();
-        loginPage.invalidLogin(authInfo);
+        loginPage.loginDataFilling(authInfo);
 
         loginPage.errorLogin();
     }
@@ -71,7 +71,7 @@ public class MoneyTransferTest {
 
         var authInfo = DataHelper.getInvalidAuthInfoPassword();
         var loginPage = new LoginPage();
-        loginPage.invalidLogin(authInfo);
+        loginPage.loginDataFilling(authInfo);
 
         loginPage.errorLogin();
     }
@@ -79,27 +79,26 @@ public class MoneyTransferTest {
     @Order(5)
     @Test
     @DisplayName("Should not login when login and password is valid but verification code is not valid")
-    void shouldNotLoginWhenVerificationCodeNotValid(){
+    void shouldNotLoginWhenVerificationCodeNotValid() {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.invalidVerify();
-
         verificationPage.errorVerification();
     }
 
     @Order(6)
     @Test
     @DisplayName("Should not transfer 0 from 1-st to 2-nd card when login valid")
-    void shouldNotTransfer0WhenLoginValidFrom1To2Card(){
+    void shouldNotTransfer0WhenLoginValidFrom1To2Card() {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var moneyTransferPage = dashboardPage.moneyTransferTo2();
-        moneyTransferPage.moneyTransfer0(DataHelper.getFirstCardInfo());
+        moneyTransferPage.moneyTransfer(DataHelper.getFirstCardInfo(), "0");
 
         moneyTransferPage.errorTransfer();
     }
@@ -107,14 +106,14 @@ public class MoneyTransferTest {
     @Order(7)
     @Test
     @DisplayName("Should not transfer 0 from 2-nd to 1-st card when login valid")
-    void shouldNotTransfer0WhenLoginValidFrom2To1Card(){
+    void shouldNotTransfer0WhenLoginValidFrom2To1Card() {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var moneyTransferPage = dashboardPage.moneyTransferTo1();
-        moneyTransferPage.moneyTransfer0(DataHelper.getSecondCardInfo());
+        moneyTransferPage.moneyTransfer(DataHelper.getSecondCardInfo(), "0");
 
         moneyTransferPage.errorTransfer();
     }
@@ -122,14 +121,14 @@ public class MoneyTransferTest {
     @Order(8)
     @Test
     @DisplayName("Should not transfer sum above balance when login valid from 1-st to 2-nd card")
-    void shouldNotTransferWhenLoginValidFrom1To2CardOverSum(){
+    void shouldNotTransferWhenLoginValidFrom1To2CardOverSum() {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var moneyTransferPage = dashboardPage.moneyTransferTo2();
-        moneyTransferPage.moneyTransferInvalid(DataHelper.getFirstCardInfo());
+        moneyTransferPage.moneyTransfer(DataHelper.getFirstCardInfo(), DataHelper.getInvalidTransactionAmount(20_000).toString());
 
         moneyTransferPage.errorTransfer();
     }
@@ -137,14 +136,14 @@ public class MoneyTransferTest {
     @Order(9)
     @Test
     @DisplayName("Should not transfer sum above balance when login valid from 1-st to 2-nd card")
-    void shouldNotTransferWhenLoginValidFrom2To1CardOverSum(){
+    void shouldNotTransferWhenLoginValidFrom2To1CardOverSum() {
 
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo);
         var dashboardPage = verificationPage.validVerify(DataHelper.getVerificationCode(authInfo));
         var moneyTransferPage = dashboardPage.moneyTransferTo1();
-        moneyTransferPage.moneyTransferInvalid(DataHelper.getSecondCardInfo());
+        moneyTransferPage.moneyTransfer(DataHelper.getSecondCardInfo(), DataHelper.getInvalidTransactionAmount(20_000).toString());
 
         moneyTransferPage.errorTransfer();
     }

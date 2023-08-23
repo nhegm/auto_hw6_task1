@@ -13,23 +13,21 @@ public class LoginPage {
     private SelenideElement passwordField = $("[data-test-id=password] input");
     private SelenideElement buttonContinue = $("[data-test-id=action-login]");
     private SelenideElement errorNote = $("[data-test-id=error-notification] .notification__content");
+
     public VerificationPage validLogin(DataHelper.AuthInfo info) {
-        loginField.setValue(info.getLogin());
-        passwordField.setValue(info.getPassword());
-        buttonContinue.click();
+        loginDataFilling(info);
         return new VerificationPage();
     }
 
-    public void invalidLogin(DataHelper.AuthInfo info) {
+    public void loginDataFilling(DataHelper.AuthInfo info) {
         loginField.setValue(info.getLogin());
         passwordField.setValue(info.getPassword());
         buttonContinue.click();
     }
 
-    public LoginPage errorLogin() {
+    public void errorLogin() {
         errorNote.shouldBe(visible);
         errorNote.shouldHave(exactText("Ошибка! Неверно указан логин или пароль"));
-        return new LoginPage();
     }
 
 }
