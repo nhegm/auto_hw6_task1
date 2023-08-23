@@ -2,6 +2,8 @@ package data;
 
 import lombok.Value;
 
+import java.util.Random;
+
 public class DataHelper {
 
     private DataHelper() {
@@ -25,16 +27,21 @@ public class DataHelper {
     public static String getInvalidVerificationCode() {
         return new String("12346");
     }
+    public static CardInfo getFirstCardInfo() {
+        return new CardInfo("5559 0000 0000 0001");
+    }
+    public static CardInfo getSecondCardInfo() {
+        return new CardInfo("5559 0000 0000 0002");
+    }
 
-    public static TransferInfo getValidTransferInfoTo(Integer fromCard, Integer amountToTransfer) {
-        String fromCardNumber = new String();
-        if (fromCard == 1) {
-            fromCardNumber="5559 0000 0000 0001";
-        }
-        if (fromCard == 2) {
-            fromCardNumber="5559 0000 0000 0002";
-        }
-        return new TransferInfo(fromCard, amountToTransfer.toString(), fromCardNumber);
+    public static Integer setTransactionAmountTo0() {
+        return 0;
+    }
+    public static Integer getValidTransactionAmount(Integer balance) {
+        return new Integer (new Random().nextInt(balance));
+    }
+    public static Integer getInvalidTransactionAmount(Integer balance) {
+        return new Integer (new Random().nextInt(balance) + balance);
     }
 
     @Value
@@ -42,17 +49,12 @@ public class DataHelper {
        private String login;
        private String password;
     }
-
     @Value
     public static class VerificationCode {
         private String verificationCode;
     }
-
     @Value
-    public static class TransferInfo {
-        private Integer fromCard;
-        private String amount;
-        private String fromCardNumber;
+    public static class CardInfo {
+        private String cardNumber;
     }
-
 }

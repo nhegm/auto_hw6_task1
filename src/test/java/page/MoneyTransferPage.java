@@ -15,16 +15,28 @@ public class MoneyTransferPage {
         amountField.shouldBe(visible);
     }
 
-    public DashboardPage moneyTransferTo(Integer cardNumber, Integer moneyValue) {
-        amountField.setValue(DataHelper.getValidTransferInfoTo(cardNumber, moneyValue).getAmount());
-        fromField.setValue(DataHelper.getValidTransferInfoTo(cardNumber, moneyValue).getFromCardNumber());
+    public DashboardPage moneyTransferValid(DataHelper.CardInfo cardFrom) {
+        amountField.setValue(DataHelper.getValidTransactionAmount(10_000).toString());
+        fromField.setValue(cardFrom.getCardNumber());
         buttonTransfer.click();
         return new DashboardPage();
     }
 
-    public MoneyTransferPage errorTransfer() {
+    public DashboardPage moneyTransfer0(DataHelper.CardInfo cardFrom) {
+        amountField.setValue(DataHelper.setTransactionAmountTo0().toString());
+        fromField.setValue(cardFrom.getCardNumber());
+        buttonTransfer.click();
+        return new DashboardPage();
+    }
+
+    public void moneyTransferInvalid(DataHelper.CardInfo cardFrom) {
+        amountField.setValue(DataHelper.getInvalidTransactionAmount(20_000).toString());
+        fromField.setValue(cardFrom.getCardNumber());
+        buttonTransfer.click();
+    }
+
+    public void errorTransfer() {
         errorNote.shouldBe(visible);
-        return new MoneyTransferPage();
     }
 
 }
